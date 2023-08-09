@@ -17,7 +17,5 @@ export const value = async (value, page) => {
       },
     });
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

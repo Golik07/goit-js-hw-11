@@ -32,7 +32,6 @@ function onSearch(e) {
 
   value(searchQuery, page)
     .then(data => {
-      console.log(data);
       if (data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -114,11 +113,12 @@ function loadMore() {
   value(searchQuery, page)
     .then(data => {
       if (data.hits.length === 0) {
+        Notiflix.Loading.remove();
         btn.style.display = 'none';
         Notiflix.Notify.failure(
           "Were sorry, but you've reached the end of search results."
         );
-        Notiflix.Loading.remove();
+
         return;
       } else {
         Notiflix.Loading.remove();
