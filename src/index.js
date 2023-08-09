@@ -39,7 +39,7 @@ function onSearch(e) {
         Notiflix.Loading.remove();
         Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
         renderCards(data.hits);
-        page = 1;
+
         btn.style.display = 'flex';
       }
     })
@@ -93,16 +93,16 @@ function loadMore() {
   page += 1;
   value(searchQuery, page)
     .then(data => {
-      if (data.totalHits === 0) {
+      if (data.hits.length === 0) {
+        btn.style.display = 'none';
         Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
+          "Were sorry, but you've reached the end of search results."
         );
         Notiflix.Loading.remove();
+        return;
       } else {
         Notiflix.Loading.remove();
-        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
         renderCards(data.hits);
-
         btn.style.display = 'flex';
       }
     })
@@ -111,8 +111,5 @@ function loadMore() {
         `❌ Oops! Something went wrong! Try reloading the page!`
       );
       Notiflix.Loading.remove();
-    })
-    .finally(() => {
-      form.reset();
     });
 }
