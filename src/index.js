@@ -12,49 +12,57 @@ form.addEventListener('submit', onSearch);
 btn.style.display = 'none';
 
 let page = 1;
+const per_page = 40;
 let searchQuery = '';
 
-btn.style;
+let pre_searchQuery = '';
 
-function onSearch(e) {
+async function onSearch(e) {
   e.preventDefault();
-  gallery.innerHTML = '';
 
   searchQuery = e.currentTarget.elements.searchQuery.value;
-  Notiflix.Loading.standard();
 
   if (searchQuery === '') {
     Notiflix.Notify.failure('Qui timide rogat docet negare');
     Notiflix.Loading.remove();
+
     btn.style.display = 'none';
     return;
   }
+  if (pre_searchQuery === searchQuery) {
+    return Notiflix.Loading.remove();
+  }
+  pre_searchQuery = searchQuery;
 
-  value(searchQuery, page)
-    .then(data => {
-      if (data.totalHits === 0) {
-        Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-        Notiflix.Loading.remove();
-        btn.style.display = 'none';
-      } else {
-        Notiflix.Loading.remove();
-        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        renderCards(data.hits);
-
-        btn.style.display = 'flex';
-      }
-    })
-    .catch(error => {
+  try {
+    const data = await value(searchQuery, page);
+    if (data.hits.length === 0) {
       Notiflix.Notify.failure(
-        `❌ Oops! Something went wrong! Try reloading the page!`
+        'Sorry, there are no images matching your search query. Please try again.'
       );
       Notiflix.Loading.remove();
-    })
-    .finally(() => {
-      form.reset();
-    });
+      btn.style.display = 'none';
+      return;
+    }
+    Notiflix.Loading.standard();
+    gallery.innerHTML = '';
+    Notiflix.Loading.remove();
+    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+    renderCards(data.hits);
+    btn.style.display = 'flex';
+    if (data.totalHits <= per_page) {
+      btn.style.display = 'none';
+      Notiflix.Notify.failure(
+        "Were sorry, but you've reached the end of search results."
+      );
+      return;
+    }
+  } catch (error) {
+    Notiflix.Notify.failure(
+      `❌ Oops! Something went wrong! Try reloading the page!`
+    );
+    Notiflix.Loading.remove();
+  }
 }
 
 function renderCards(arr) {
@@ -107,29 +115,32 @@ function renderCards(arr) {
 
 btn.addEventListener('click', loadMore);
 
-function loadMore() {
-  Notiflix.Loading.standard();
-  page += 1;
-  value(searchQuery, page)
-    .then(data => {
-      if (data.hits.length === 0) {
-        Notiflix.Loading.remove();
-        btn.style.display = 'none';
-        Notiflix.Notify.failure(
-          "Were sorry, but you've reached the end of search results."
-        );
-
-        return;
-      } else {
-        Notiflix.Loading.remove();
-        renderCards(data.hits);
-        btn.style.display = 'flex';
-      }
-    })
-    .catch(error => {
-      Notiflix.Notify.failure(
-        `❌ Oops! Something went wrong! Try reloading the page!`
-      );
+async function loadMore() {
+  try {
+    Notiflix.Loading.standard();
+    page += 1;
+    const data = await value(searchQuery, page);
+    if (data.hits.length === 0) {
       Notiflix.Loading.remove();
-    });
+      btn.style.display = 'none';
+      return;
+    }
+    Notiflix.Loading.remove();
+    renderCards(data.hits);
+    const total_pages = Math.ceil(data.totalHits / per_page);
+    if (page < total_pages) {
+      btn.style.display = 'flex';
+    } else {
+      btn.style.display = 'none';
+      Notiflix.Notify.failure(
+        "Were sorry, but you've reached the end of search results."
+      );
+      return;
+    }
+  } catch (error) {
+    Notiflix.Notify.failure(
+      `❌ Oops! Something went wrong! Try reloading the page!`
+    );
+    Notiflix.Loading.remove();
+  }
 }
