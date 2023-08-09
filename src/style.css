@@ -1,0 +1,118 @@
+.search-form {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+a {
+  text-decoration: none;
+  padding-bottom: 40px;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+.info p {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 10px;
+  gap: 10px 5px;
+  justify-content: space-around;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  height: 20px;
+  align-items: center;
+}
+
+.card {
+  text-decoration: none;
+  padding-bottom: 40px;
+  color: teal;
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid #bdbdbd;
+}
+.btn-load {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+.load-more {
+  display: inline-flex;
+  justify-content: center;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: #eee;
+  border: 1px solid #bdbdbd;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.load-more:hover {
+  background-color: #bdbdbd;
+}
+
+.text-field__btn {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: #eee;
+  border: 1px solid #bdbdbd;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.text-field__btn:hover {
+  background-color: #bdbdbd;
+}
+
+.text-field__input {
+  border: 1px solid #bdbdbd;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  position: relative;
+  z-index: 2;
+}
+.text-field__btn {
+  position: relative;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left-width: 0;
+}
