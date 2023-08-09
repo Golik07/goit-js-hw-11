@@ -39,9 +39,8 @@ a {
   align-items: center;
 }
 
-.card {
+.photo-card {
   text-decoration: none;
-  padding-bottom: 40px;
   color: teal;
   width: 100%;
   max-width: 500px;

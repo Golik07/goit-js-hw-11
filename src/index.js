@@ -1,5 +1,7 @@
 import { value } from './cat-api.js';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -30,11 +32,13 @@ function onSearch(e) {
 
   value(searchQuery, page)
     .then(data => {
+      console.log(data);
       if (data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         Notiflix.Loading.remove();
+        btn.style.display = 'none';
       } else {
         Notiflix.Loading.remove();
         Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
@@ -60,14 +64,24 @@ function renderCards(arr) {
   }
 
   const markup = arr
-    .map(({ webformatURL, tags, likes, views, comments, downloads, user }) => {
-      return `
-        <div class="card">
+    .map(
+      ({
+        webformatURL,
+        tags,
+        largeImageURL,
+        likes,
+        views,
+        comments,
+        downloads,
+        user,
+      }) => {
+        return `<a href="${largeImageURL}"  >
+        <div class="photo-card">
             <div class="card-header">
       <p >${user}</p>
       <p >${views} views</p>
     </div>
-            <img src="${webformatURL}" alt="${tags}"   height="300" width="500" />
+            <img src="${webformatURL}" alt="${tags}" loading="lazy"  height="300" width="500" />
             <div class="info">
                 <p >
                     Likes<b>${likes}</b>
@@ -79,11 +93,17 @@ function renderCards(arr) {
                     Comments<b>${comments}</b>
                 </p>
             </div>
-</div>`;
-    })
+</div></a>`;
+      }
+    )
     .join('');
 
   gallery.insertAdjacentHTML('beforeend', markup);
+  const lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+  });
 }
 
 btn.addEventListener('click', loadMore);
