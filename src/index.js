@@ -36,6 +36,7 @@ async function onSearch(e) {
 
   try {
     const data = await value(searchQuery, page);
+
     if (data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
@@ -49,6 +50,7 @@ async function onSearch(e) {
     Notiflix.Loading.remove();
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
     renderCards(data.hits);
+    lightbox.refresh();
     btn.style.display = 'flex';
     if (data.totalHits <= per_page) {
       btn.style.display = 'none';
@@ -65,24 +67,17 @@ async function onSearch(e) {
   }
 }
 
-function renderCards(arr) {
-  if (!gallery) {
-    return;
-  }
-
-  const markup = arr
-    .map(
-      ({
-        webformatURL,
-        tags,
-        largeImageURL,
-        likes,
-        views,
-        comments,
-        downloads,
-        user,
-      }) => {
-        return `<a href="${largeImageURL}"  >
+function creatCard({
+  webformatURL,
+  tags,
+  largeImageURL,
+  likes,
+  views,
+  comments,
+  downloads,
+  user,
+}) {
+  return `<a href="${largeImageURL}"  >
         <div class="photo-card">
             <div class="card-header">
       <p >${user}</p>
@@ -101,17 +96,18 @@ function renderCards(arr) {
                 </p>
             </div>
 </div></a>`;
-      }
-    )
-    .join('');
-
-  gallery.insertAdjacentHTML('beforeend', markup);
-  const lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionPosition: 'bottom',
-    captionDelay: 250,
-  });
 }
+
+function renderCards(arr) {
+  const markup = arr.map(creatCard).join('');
+  gallery.insertAdjacentHTML('beforeend', markup);
+}
+
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
 btn.addEventListener('click', loadMore);
 
@@ -127,6 +123,8 @@ async function loadMore() {
     }
     Notiflix.Loading.remove();
     renderCards(data.hits);
+    scroll();
+    lightbox.refresh();
     const total_pages = Math.ceil(data.totalHits / per_page);
     if (page < total_pages) {
       btn.style.display = 'flex';
@@ -143,4 +141,15 @@ async function loadMore() {
     );
     Notiflix.Loading.remove();
   }
+}
+
+function scroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
