@@ -31,7 +31,7 @@ a {
   justify-content: space-around;
 }
 
-.card-header {
+.header {
   display: flex;
   justify-content: space-between;
   padding: 10px;
@@ -39,7 +39,7 @@ a {
   align-items: center;
 }
 
-.photo-card {
+.card {
   text-decoration: none;
   color: teal;
   width: 100%;

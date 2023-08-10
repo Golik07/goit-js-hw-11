@@ -20,10 +20,12 @@ let pre_searchQuery = '';
 async function onSearch(e) {
   e.preventDefault();
 
-  searchQuery = e.currentTarget.elements.searchQuery.value;
+  searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
   if (searchQuery === '') {
-    Notiflix.Notify.failure('Qui timide rogat docet negare');
+    Notiflix.Notify.failure(
+      'The search string cannot be empty. Please specify your search query.'
+    );
     Notiflix.Loading.remove();
 
     btn.style.display = 'none';
@@ -37,14 +39,18 @@ async function onSearch(e) {
   try {
     const data = await value(searchQuery, page);
 
-    if (data.hits.length === 0) {
+    if (data.totalHits === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+
+      gallery.innerHTML = '';
       Notiflix.Loading.remove();
       btn.style.display = 'none';
+
       return;
     }
+
     Notiflix.Loading.standard();
     gallery.innerHTML = '';
     Notiflix.Loading.remove();
@@ -78,8 +84,8 @@ function creatCard({
   user,
 }) {
   return `<a href="${largeImageURL}"  >
-        <div class="photo-card">
-            <div class="card-header">
+        <div class="card">
+            <div class="header">
       <p >${user}</p>
       <p >${views} views</p>
     </div>
