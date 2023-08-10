@@ -27,7 +27,7 @@ async function onSearch(e) {
       'The search string cannot be empty. Please specify your search query.'
     );
     Notiflix.Loading.remove();
-
+    gallery.innerHTML = '';
     btn.style.display = 'none';
     return;
   }
