@@ -19,7 +19,7 @@ let pre_searchQuery = '';
 
 async function onSearch(e) {
   e.preventDefault();
-
+  page = 1;
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
   if (searchQuery === '') {
