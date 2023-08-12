@@ -90,7 +90,7 @@ function creatCard({
       <p >${user}</p>
       <p >${views} views</p>
     </div>
-            <img src="${webformatURL}" alt="${tags}" loading="lazy"  height="300" width="500" />
+            <img src="${webformatURL}" alt="${tags}" loading="lazy"  height="300" width="100%" />
             <div class="info">
                 <p >
                     Likes<b>${likes}</b>
